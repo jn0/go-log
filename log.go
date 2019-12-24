@@ -126,10 +126,10 @@ func (self *Logger) Log(level LogLevel, message string, args ...interface{}) {
 }
 
 func (self *Logger) Fatal(message string, args ...interface{}) {
-	out := fmt.Sprintf("FATAL: "+message, args...)
-	f := func (x string) { log_.Fatal(x) }
+	out := fmt.Sprintf(message, args...)
+	f := func (x string) { log_.Fatal("FATAL: "+x) }
 	if self.Panic {
-		f = func (x string) { panic(x) }
+		f = func (x string) { self.Log(FATAL, x); panic(x) }
 	}
 	f(out)
 }
