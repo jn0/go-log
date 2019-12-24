@@ -1,6 +1,6 @@
-package main
+package logging
 
-import logging "log"
+import log_ "log"
 import "fmt"
 import "strings"
 
@@ -116,18 +116,18 @@ func (self *Logger) SetLevel(level LogLevel) {
 
 // unconditionally write to Logger with "NOTE:" prefix
 func (self *Logger) Say(message string, args ...interface{}) {
-	logging.Printf("NOTE: "+message, args...)
+	log_.Printf("NOTE: "+message, args...)
 }
 
 func (self *Logger) Log(level LogLevel, message string, args ...interface{}) {
 	if level <= self.Level {
-		logging.Printf(level.String()+": "+message, args...)
+		log_.Printf(level.String()+": "+message, args...)
 	}
 }
 
 func (self *Logger) Fatal(message string, args ...interface{}) {
 	out := fmt.Sprintf("FATAL: "+message, args...)
-	f := func (x string) { logging.Fatal(x) }
+	f := func (x string) { log_.Fatal(x) }
 	if self.Panic {
 		f = func (x string) { panic(x) }
 	}
