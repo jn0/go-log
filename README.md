@@ -8,17 +8,20 @@ Tested using [github.com/stretchr/testify](https://github.com/stretchr/testify).
 
 The `Fatal`s were turned into `panic`s in all the tests. 
 
-coverage: 97.8% of statements _(the actual call to [`logging.Fatal`](log.go#L130)
+coverage: 98.1% of statements _(the actual call to [`logging.Fatal`](log.go#L130)
 has not been tested)_ using
 
 ```bash
 #!/bin/bash
-set -e
-rm -f cover.out
-go test -coverprofile cover.out
-sed -e 's,^_.*/\([^/]\+\)$,./\1,' -i cover.out
-go tool cover -html=cover.out -o c.html
-ls -l c.html
+profile=cover.out                                   # use this coverage profile
+html=c.html                                         # make this HTML file
+set -e                                              # stop on any error
+rm -f "${profile}" "${html}"                        # clear files
+go test -coverprofile "${profile}"                  # generate profile
+sed -e 's,^_.*/\([^/]\+\)$,./\1,' -i "${profile}"   # make it usable
+go tool cover -html="${profile}" -o "${html}"       # generate HTML
+rm -f "${profile}"                                  # remove patched profile
+ls -l "${html}"                                     # notify on completion
 # EOF #
 ```
 
