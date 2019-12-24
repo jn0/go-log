@@ -83,16 +83,16 @@ func adjustLogLevel(name string) {
 	if !ok {
 		Root.Fatal("Wrong level name: %+q", name)
 	}
-	if Root.Level != lvl {
-		Root.Say("Log level %s -> %s (%s)", Root.Level, lvl, name)
+	if Root.level != lvl {
+		Root.Say("Log level %s -> %s (%s)", Root.level, lvl, name)
 		Root.SetLevel(lvl)
 	}
 }
 
 type Logger struct {
 	log *log_.Logger
-	Level LogLevel
-	Panic bool
+	level LogLevel
+	panics bool
 }
 
 func NewLogger(level LogLevel) *Logger {
@@ -100,21 +100,21 @@ func NewLogger(level LogLevel) *Logger {
 	if !ValidLogLevel(level) {
 		panic(fmt.Errorf("FATAL: Invalid level %#v (%s)", level, level))
 	}
-	l.Level = level
+	l.level = level
 	return l
 }
 
 func (self *Logger) UsePanic(use bool) {
-	self.Panic = use
+	self.panics = use
 }
 
 func (self *Logger) SetLevel(level LogLevel) {
 	if !ValidLogLevel(level) {
 		self.Fatal("Invalid level %#v (%s)", level, level)
 	}
-	if self.Level != level {
-		self.Say("Log level %s -> %s", self.Level, level)
-		self.Level = level
+	if self.level != level {
+		self.Say("Log level %s -> %s", self.level, level)
+		self.level = level
 	}
 }
 
@@ -124,7 +124,7 @@ func (self *Logger) Say(message string, args ...interface{}) {
 }
 
 func (self *Logger) Log(level LogLevel, message string, args ...interface{}) {
-	if level <= self.Level {
+	if level <= self.level {
 		self.log.Printf(level.String()+": "+message, args...)
 	}
 }
@@ -132,7 +132,7 @@ func (self *Logger) Log(level LogLevel, message string, args ...interface{}) {
 func (self *Logger) Fatal(message string, args ...interface{}) {
 	out := fmt.Sprintf(message, args...)
 	f := func (x string) { self.log.Fatal("FATAL: "+x) }
-	if self.Panic {
+	if self.panics {
 		f = func (x string) { self.Log(FATAL, x); panic(x) }
 	}
 	f(out)
