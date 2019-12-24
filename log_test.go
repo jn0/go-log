@@ -2,7 +2,40 @@ package logging
 
 import "testing"
 import "strings"
+import "os"
 import "github.com/stretchr/testify/assert"
+
+func TestConfig(t *testing.T) {
+	log := NewLogger(INFO)
+	log.Info("first line")
+
+	f := log.Flags()
+	log.Info("flags were %#v", f)
+	log.SetFlags(0)
+	log.Info("flags set to %#v", 0)
+	log.SetFlags(f)
+	log.Info("flags back to %#v", f)
+
+	p := log.Prefix()
+	log.Info("prefix was %q", p)
+	log.SetPrefix("PrEfIx// ")
+	log.Info("prefix is now %q", log.Prefix())
+	log.SetPrefix(p)
+	log.Info("prefix is back %q", log.Prefix())
+
+	/*
+	o := log.Output()
+	log.Info("output was %#v", o)
+	*/
+	log.SetOutput(os.Stdout)
+	log.Info("output is %#v", os.Stdout)
+	/*
+	log.Info("output is %#v", log.Output())
+	log.SetOutput(o)
+	log.Info("output is back %#v", log.Output())
+	*/
+	log.Info("last line")
+}
 
 func TestNames(t *testing.T) {
 	for lvl, lnm := range LogLevelNames {
