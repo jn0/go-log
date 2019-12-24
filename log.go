@@ -78,11 +78,11 @@ func LogLevelByName(level string) LogLevel {
 func adjustLogLevel(name string) {
 	lvl, ok := LogLevelValues[strings.ToUpper(name)]
 	if !ok {
-		log.Fatal("Wrong level name: %+q", name)
+		Root.Fatal("Wrong level name: %+q", name)
 	}
-	if log.Level != lvl {
-		log.Say("Log level %s -> %s (%s)", log.Level, lvl, name)
-		log.SetLevel(lvl)
+	if Root.Level != lvl {
+		Root.Say("Log level %s -> %s (%s)", Root.Level, lvl, name)
+		Root.SetLevel(lvl)
 	}
 }
 
@@ -154,6 +154,6 @@ func (self *Logger) Debug(message string, args ...interface{}) {
 	self.Log(DEBUG, message, args...)
 }
 
-var log = NewLogger(INFO)
+var Root = NewLogger(INFO)
 
 /* EOF */
