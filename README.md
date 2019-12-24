@@ -8,7 +8,7 @@ Tested using [github.com/stretchr/testify](https://github.com/stretchr/testify).
 
 The `Fatal`s were turned into `panic`s in all the tests. 
 
-coverage: 97.8% of statements _(the actual call to [`logging.Fatal`](log.go#L136)
+coverage: 97.8% of statements _(the actual call to [`logging.Fatal`](log.go#L130)
 has not been tested)_ using
 
 ```bash
