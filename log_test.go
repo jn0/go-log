@@ -89,6 +89,36 @@ func TestRoot(t *testing.T) {
 		`Root.Fatal("Fatal: hello %v", "world")`)
 }
 
+func TestMyRoot(t *testing.T) {
+	var mylog = Root // import "logging"; log := logging.Root // use case
+	xlog := Root	 // another syntax
+
+	assert.NotPanics(t, func() { xlog.UsePanic(false) }, `UsePanic(false)`)
+	assert.NotPanics(t, func() { xlog.UsePanic(true) }, `UsePanic(true)`)
+
+	assert.NotPanics(t, func() { mylog.SetLevel(WARN) }, `SetLevel(WARN)`)
+	assert.NotPanics(t, func() { mylog.Log(-1, "Log: hello %v", "world") },
+		`Log(-1, "Log: hello %v", "world")`)
+	assert.NotPanics(t, func() { mylog.Say("Say: hello %v", "world") },
+		`Say("Say: hello %v", "world")`)
+	assert.NotPanics(t, func() { mylog.Error("Error: hello %v", "world") },
+		`Error("Error: hello %v", "world")`)
+	assert.NotPanics(t, func() { mylog.Warning("Warning: hello %v", "world") },
+		`Warning("Warning: hello %v", "world")`)
+	assert.NotPanics(t, func() { mylog.Warn("Warn: hello %v", "world") },
+		`Warn("Warn: hello %v", "world")`)
+	assert.NotPanics(t, func() { mylog.Info("Info: hello %v", "world") },
+		`Info("Info: hello %v", "world")`)
+	assert.NotPanics(t, func() { mylog.Debug("Debug: hello %v", "world") },
+		`Debug("Debug: hello %v", "world")`)
+	assert.Panics(t,
+		func() { mylog.SetLevel(-99) },
+		`mylog.SetLevel(-99)`)
+	assert.Panics(t,
+		func() { mylog.Fatal("Fatal: hello %v", "world") },
+		`mylog.Fatal("Fatal: hello %v", "world")`)
+}
+
 func TestNew(t *testing.T) {
 	assert.Panics(t, func() { NewLogger(-100) }, `NewLogger(-100)`)
 	var log2 *Logger
