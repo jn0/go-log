@@ -3,10 +3,11 @@ package logging
 import "testing"
 import "strings"
 import "os"
+import "log"
 import "github.com/stretchr/testify/assert"
 
 func TestConfig(t *testing.T) {
-	log := NewLogger(INFO)
+	log := NewLogger(INFO).SetPrefix("config: ")
 	log.Info("first line")
 
 	f := log.Flags()
@@ -155,7 +156,7 @@ func TestMyRoot(t *testing.T) {
 func TestNew(t *testing.T) {
 	assert.Panics(t, func() { NewLogger(-100) }, `NewLogger(-100)`)
 	var log2 *Logger
-	assert.NotPanics(t, func() { log2 = NewLogger(DEBUG) },
+	assert.NotPanics(t, func() { log2 = NewLogger(DEBUG).SetPrefix("log2: ").SetFlags(log.Lshortfile) },
 		`log2 = NewLogger(DEBUG)`)
 	assert.NotPanics(t, func() { log2.UsePanic(true) },
 		`log2.UsePanic(true)`)
