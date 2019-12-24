@@ -1,8 +1,11 @@
 package logging
 
 import log_ "log"
-import "fmt"
-import "strings"
+import (
+	"fmt"
+	"strings"
+	"os"
+)
 
 type LogLevel int
 
@@ -87,12 +90,13 @@ func adjustLogLevel(name string) {
 }
 
 type Logger struct {
+	log *log_.Logger
 	Level LogLevel
 	Panic bool
 }
 
 func NewLogger(level LogLevel) *Logger {
-	var l = &Logger{}
+	var l = &Logger{log: log_.New(os.Stderr, "", log_.LstdFlags)}
 	if !ValidLogLevel(level) {
 		panic(fmt.Errorf("FATAL: Invalid level %#v (%s)", level, level))
 	}
@@ -116,18 +120,18 @@ func (self *Logger) SetLevel(level LogLevel) {
 
 // unconditionally write to Logger with "NOTE:" prefix
 func (self *Logger) Say(message string, args ...interface{}) {
-	log_.Printf("NOTE: "+message, args...)
+	self.log.Printf("NOTE: "+message, args...)
 }
 
 func (self *Logger) Log(level LogLevel, message string, args ...interface{}) {
 	if level <= self.Level {
-		log_.Printf(level.String()+": "+message, args...)
+		self.log.Printf(level.String()+": "+message, args...)
 	}
 }
 
 func (self *Logger) Fatal(message string, args ...interface{}) {
 	out := fmt.Sprintf(message, args...)
-	f := func (x string) { log_.Fatal("FATAL: "+x) }
+	f := func (x string) { self.log.Fatal("FATAL: "+x) }
 	if self.Panic {
 		f = func (x string) { self.Log(FATAL, x); panic(x) }
 	}
