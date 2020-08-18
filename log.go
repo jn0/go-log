@@ -29,6 +29,7 @@ const (
 	CRITICAL = FATAL
 	CRYTICAL = FATAL
 	INVALID  = LogLevel(-1)
+	NOTE     = LogLevel(-2)
 )
 
 var LogLevelNames = map[LogLevel]string{
@@ -72,6 +73,7 @@ var LogLevelColors = map[LogLevel]aurora.Color{
 	WARNING: aurora.YellowFg | aurora.BrightFg,
 	INFO:    aurora.CyanFg | aurora.BrightFg,
 	DEBUG:   aurora.GreenFg, // aurora.BlackFg | aurora.BrightFg,
+	NOTE:    aurora.BrownFg,
 }
 
 func (self LogLevel) String() string { return self.Name() }
@@ -151,7 +153,7 @@ func (self *Logger) SetLevel(level LogLevel) {
 
 // unconditionally write to Logger with "NOTE:" prefix
 func (self *Logger) Say(message string, args ...interface{}) {
-	self.log.Printf("NOTE: "+message, args...)
+	self.log.Printf(NOTE.Colored("NOTE: "+message, self.color), args...)
 }
 
 func (self *Logger) colored(level LogLevel, message string) string {
