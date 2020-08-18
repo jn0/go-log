@@ -135,6 +135,10 @@ func (self *Logger) UsePanic(use bool) {
 	self.panics = use
 }
 
+func (self *Logger) UseColor(color aurora.Aurora) {
+	self.color = color
+}
+
 func (self *Logger) SetLevel(level LogLevel) {
 	if !ValidLogLevel(level) {
 		self.Fatal("Invalid level %#v (%s)", level, level)
