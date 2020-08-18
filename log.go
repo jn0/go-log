@@ -71,7 +71,7 @@ var LogLevelColors = map[LogLevel]aurora.Color{
 	ERROR:   aurora.RedFg | aurora.BrightFg,
 	WARNING: aurora.YellowFg | aurora.BrightFg,
 	INFO:    aurora.CyanFg | aurora.BrightFg,
-	DEBUG:   aurora.BlackFg | aurora.BrightFg,
+	DEBUG:   aurora.GreenFg, // aurora.BlackFg | aurora.BrightFg,
 }
 
 func (self LogLevel) String() string { return self.Name() }
